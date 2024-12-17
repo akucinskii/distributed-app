@@ -1,0 +1,41 @@
+<.header>
+  Box <%= @box.id %>
+  <:subtitle>This is a box record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/boxes/#{@box}/edit"}>
+      <.button>Edit box</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @box.name %></:item>
+  <:item title="Description"><%= @box.description %></:item>
+</.list>
+
+<.header>
+  Items in this box
+  <:actions>
+    <.link href={~p"/items/new"}>
+      <.button>New Item</.button>
+    </.link>
+  </:actions>
+</.header>
+
+
+<.table id="items" rows={@box_items} row_click={&JS.navigate(~p"/items/#{&1}")}>
+  <:col :let={item} label="Item Name"><%= item.name %></:col>
+  <:col :let={item} label="Item Description"><%= item.description %></:col>
+  <:action :let={item}>
+    <.link navigate={~p"/items/#{item}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={item}>
+    <.link href={~p"/items/#{item}"} method="delete" data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+
+
+<.back navigate={~p"/boxes"}>Back to boxes</.back>

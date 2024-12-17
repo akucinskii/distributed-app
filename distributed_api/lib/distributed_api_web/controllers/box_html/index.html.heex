@@ -1,0 +1,24 @@
+<.header>
+  Listing Boxes
+  <:actions>
+    <.link href={~p"/boxes/new"}>
+      <.button>New Box</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="boxes" rows={@boxes} row_click={&JS.navigate(~p"/boxes/#{&1}")}>
+  <:col :let={box} label="Name"><%= box.name %></:col>
+  <:col :let={box} label="Description"><%= box.description %></:col>
+  <:action :let={box}>
+    <div class="sr-only">
+      <.link navigate={~p"/boxes/#{box}"}>Show</.link>
+    </div>
+    <.link navigate={~p"/boxes/#{box}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={box}>
+    <.link href={~p"/boxes/#{box}"} method="delete" data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>

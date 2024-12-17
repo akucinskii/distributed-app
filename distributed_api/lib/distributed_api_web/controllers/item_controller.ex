@@ -2,6 +2,7 @@ defmodule DistributedApiWeb.ItemController do
   use DistributedApiWeb, :controller
 
   alias DistributedApi.Items
+  alias DistributedApi.Boxes
   alias DistributedApi.Items.Item
 
   def index(conn, _params) do
@@ -11,7 +12,8 @@ defmodule DistributedApiWeb.ItemController do
 
   def new(conn, _params) do
     changeset = Items.change_item(%Item{})
-    render(conn, :new, changeset: changeset)
+    boxes = Boxes.list_boxes() |> Enum.map(&{&1.name, &1.id})
+    render(conn, :new, changeset: changeset, boxes: boxes)
   end
 
   def create(conn, %{"item" => item_params}) do
@@ -22,7 +24,8 @@ defmodule DistributedApiWeb.ItemController do
         |> redirect(to: ~p"/items/#{item}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, :new, changeset: changeset)
+        boxes = Boxes.list_boxes() |> Enum.map(&{&1.name, &1.id})
+        render(conn, :new, changeset: changeset, boxes: boxes)
     end
   end
 
@@ -34,7 +37,13 @@ defmodule DistributedApiWeb.ItemController do
   def edit(conn, %{"id" => id}) do
     item = Items.get_item!(id)
     changeset = Items.change_item(item)
-    render(conn, :edit, item: item, changeset: changeset)
+    boxes = Boxes.list_boxes() |> Enum.map(&{&1.name, &1.id})
+
+    render(conn, :edit,
+      item: item,
+      changeset: changeset,
+      boxes: boxes
+    )
   end
 
   def update(conn, %{"id" => id, "item" => item_params}) do
@@ -47,7 +56,13 @@ defmodule DistributedApiWeb.ItemController do
         |> redirect(to: ~p"/items/#{item}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, :edit, item: item, changeset: changeset)
+        boxes = Boxes.list_boxes() |> Enum.map(&{&1.name, &1.id})
+
+        render(conn, :edit,
+          item: item,
+          changeset: changeset,
+          boxes: boxes
+        )
     end
   end
 

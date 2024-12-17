@@ -1,0 +1,8 @@
+<.header>
+  Edit Box <%= @box.id %>
+  <:subtitle>Use this form to manage box records in your database.</:subtitle>
+</.header>
+
+<.box_form changeset={@changeset} action={~p"/boxes/#{@box}"} />
+
+<.back navigate={~p"/boxes"}>Back to boxes</.back>
