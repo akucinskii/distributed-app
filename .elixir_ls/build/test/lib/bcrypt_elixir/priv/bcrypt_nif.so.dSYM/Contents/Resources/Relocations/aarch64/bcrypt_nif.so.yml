@@ -1,5 +1,0 @@
----
-triple:          'arm64-apple-darwin'
-binary-path:     '/Users/arturkucinski/personal/Studia/Semestr-zimowy-2024-2025/distributed-app/.elixir_ls/build/test/lib/bcrypt_elixir/priv/bcrypt_nif.so'
-relocations:     []
-...
