@@ -35,3 +35,5 @@ distributed_api-*.tar
 npm-debug.log
 /assets/node_modules/
 
+
+.elixir_ls/
