@@ -1,0 +1,47 @@
+<.header>
+  Listing Boxes live
+  <:actions>
+    <.link patch={~p"/boxes_live/new"}>
+      <.button>New Box live</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="boxes"
+  rows={@streams.boxes}
+  row_click={fn {_id, box} -> JS.navigate(~p"/boxes_live/#{box}") end}
+>
+  <:col :let={{_id, box}} label="Name"><%= box.name %></:col>
+  <:col :let={{_id, box}} label="Description"><%= box.description %></:col>
+  <:action :let={{_id, box}}>
+    <div class="sr-only">
+      <.link navigate={~p"/boxes_live/#{box}"}>Show</.link>
+    </div>
+    <.link patch={~p"/boxes_live/#{box}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, box}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: box.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="box-modal"
+  show
+  on_cancel={JS.patch(~p"/boxes_live")}
+>
+  <.live_component
+    module={DistributedApiWeb.BoxLive.FormComponent}
+    id={@box.id || :new}
+    title={@page_title}
+    action={@live_action}
+    box={@box}
+    patch={~p"/boxes_live"}
+  />
+</.modal>

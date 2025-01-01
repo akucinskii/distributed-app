@@ -54,22 +54,35 @@ defmodule DistributedApiWeb.Router do
 
     live_session :redirect_if_user_is_authenticated,
       on_mount: [{DistributedApiWeb.UserAuth, :redirect_if_user_is_authenticated}] do
-      live("/users/register", UserRegistrationLive, :new)
-      live("/users/log_in", UserLoginLive, :new)
-      live("/users/reset_password", UserForgotPasswordLive, :new)
-      live("/users/reset_password/:token", UserResetPasswordLive, :edit)
+      live "/users/register", UserRegistrationLive, :new
+      live "/users/log_in", UserLoginLive, :new
+      live "/users/reset_password", UserForgotPasswordLive, :new
+      live "/users/reset_password/:token", UserResetPasswordLive, :edit
     end
 
     post("/users/log_in", UserSessionController, :create)
   end
 
   scope "/", DistributedApiWeb do
-    pipe_through([:browser, :require_authenticated_user])
+    pipe_through [:browser, :require_authenticated_user]
 
     live_session :require_authenticated_user,
       on_mount: [{DistributedApiWeb.UserAuth, :ensure_authenticated}] do
-      live("/users/settings", UserSettingsLive, :edit)
-      live("/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email)
+      live "/users/settings", UserSettingsLive, :edit
+      live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+      live "/boxes_live", BoxLive.Index, :index
+      live "/boxes_live/new", BoxLive.Index, :new
+      live "/boxes_live/:id/edit", BoxLive.Index, :edit
+
+      live "/boxes_live/:id", BoxLive.Show, :show
+      live "/boxes_live/:id/show/edit", BoxLive.Show, :edit
+
+      live "/items_live", ItemLive.Index, :index
+      live "/items_live/new", ItemLive.Index, :new
+      live "/items_live/:id/edit", ItemLive.Index, :edit
+
+      live "/items_live/:id", ItemLive.Show, :show
+      live "/items_live/:id/show/edit", ItemLive.Show, :edit
     end
   end
 
